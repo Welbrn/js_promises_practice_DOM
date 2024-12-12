@@ -5,16 +5,19 @@ function handleNotification(divMessage, isSuccess) {
 
   div.textContent = divMessage;
   div.className = isSuccess ? 'success' : 'error';
+
+  document.body.appendChild(div);
 }
 
 const firstPromise = new Promise((resolve, reject) => {
-  document.addEventListener('click', () => {
-    resolve('First promise was resolved');
-  });
-
-  setTimeout(() => {
+  const timeout = setTimeout(() => {
     reject(new Error('First promise was rejected'));
   }, 3000);
+
+  document.addEventListener('click', () => {
+    clearTimeout(timeout);
+    resolve('First promise was resolved');
+  });
 });
 
 const secondPromise = new Promise((resolve, reject) => {
@@ -40,6 +43,9 @@ const thirdPromise = new Promise((resolve, reject) => {
 
     if (leftClicked && rightClicked) {
       resolve('Third promise was resolved');
+
+      leftClicked = false;
+      rightClicked = false;
     }
   });
 });
